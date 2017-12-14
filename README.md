@@ -1,6 +1,12 @@
 # goweb
 一个基于go语言开发API的工具，这个工具受到了很多SpringMVC的启发，结合了go语言本身的特性，实现比较简单，接下来，看看如何使用它。
 
+下载安装：
+
+```
+go get github.com/alberliu/goweb
+```
+
 ### 1.核心功能
 
 #### 请求体参数注入
@@ -86,7 +92,9 @@ func main() {
 }
 ```
 
-执行上面的代码，然后访问url：http://localhost:8000/test/123456/alber，就可以返回下面的json数据
+执行上面的代码，然后访问url：http://localhost:8000/test/123456/alber
+
+就可以返回下面的json数据
 
 ```json
 {
