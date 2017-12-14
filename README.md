@@ -14,7 +14,7 @@ go get github.com/alberliu/goweb
 ```go
 package main
 
-import "goweb"
+import "github.com/alberliu/goweb"
 
 type User struct {
 	Id   int    `json:"id"`
@@ -74,7 +74,7 @@ func main() {
 ```go
 package main
 
-import "goweb"
+import "github.com/alberliu/goweb"
 
 type User struct {
 	Id   int64  `json:"id"`
@@ -113,6 +113,7 @@ goweb可以注册多种形式的handler，goweb会利用反射自动解析函数
 
 func handler(ctx goweb.Context) {
 }
+
 func handler(ctx goweb.Context) User {
 	return User{}
 }
