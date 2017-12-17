@@ -8,8 +8,6 @@
 go get github.com/alberliu/goweb
 ```
 
-[TOC]
-
 ### 1.核心功能
 
 #### 请求体参数注入
