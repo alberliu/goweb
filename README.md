@@ -1,11 +1,14 @@
 # goweb
-一个基于go语言开发API的工具，这个工具受到了很多SpringMVC的启发，结合了go语言本身的特性，实现比较简单，接下来，看看如何使用它。
+
+一个基于go语言开发API的工具，这个工具受到了SpringMVC的启发，结合了go语言本身的特性，整体比较简单，接下来，看看如何使用它。
 
 下载安装：
 
 ```
 go get github.com/alberliu/goweb
 ```
+
+[TOC]
 
 ### 1.核心功能
 
@@ -52,11 +55,11 @@ func main() {
 
 上面的代码是一个最简的例子，HandlePost(string, interface{})会将一个handler注册到一个全局的内置的goweb实例defultGoWeb，ListenAndServe(":8000")会将defultGoWeb赋给Server的handler变量，然后启动这个Server。（是不是和内置的ServerMux有点像）
 
-goweb会自动解析注册到它本身的handler,当请求到来时，会将请求体的json数据反序列化并注入到handler的参数，handler处理完逻辑返回时，会将handler的返回值序列化为json数据返回。goweb默认使用json的序列化和反序列化方式，当然你可以定义自己的，这个在后面你可以看到。
+goweb会自动解析注册到它本身的handler,当请求到来时，会将请求体的json数据反序列化并注入到handler的参数，handler处理完逻辑返回时，会将handler的返回值序列化为json数据返回。goweb默认使用json的序列化和反序列化方式，当然你可以定义自己的序列化方式，这个在后面你可以看到。
 
-hanler的参数和返回和返回值可以是结构体或者指针。
+例子给出的handler的参数和返回都是结构体类型，当然你也可以使用指针类型。
 
-结构体goweb其实本质上就是一个路由，它实现了Handler接口。你也可以这样是使用它
+结构体goweb其实本质上就是一个路由，它实现了Handler接口。上面的例子都是默认的defultGoWeb，你也可以自己实例化一个goweb。
 
 ```go
 func main() {
@@ -103,11 +106,11 @@ func main() {
 }
 ```
 
-handler可以获取到url中的参数，handler的第一个参数对应url中的的第一个参数，第二个参数对应url中的的第二个参数，依次类推。不过暂时还有个限制，在url中使用参数时，handler中的参数必须与url中的参数个数一致，且类型必须为string或者int64.
+handler可以获取到url中的参数，并且注入到handler参数中。handler的第一个参数对应url中的第一个参数，第二个参数对应url中的的第二个参数，依次类推。不过暂时还有个限制，在url中使用参数时，handler中的参数必须与url中的参数个数一致，且类型必须为string或者int64。
 
 ### 2.handler
 
-goweb可以注册多种形式的handler，goweb会利用反射自动解析函数，支持多种类型，但是不能超出它能解析的能力范围。以下是它所有能解析的类型
+goweb可以注册多种形式的handler，goweb会利用反射自动解析函数，支持多种类型，但是不能超出它可以解析的范围。以下是它所有能解析的类型。
 
 ```go
 
@@ -135,7 +138,7 @@ func handler(ctx goweb.Context, name string, id int64) User {
 }
 ```
 
-Context是一个请求上下文，context便于扩展，它的内部结构如下所示
+Context是一个请求上下文，他只有ResponseWriter和Request两个字段，它的内部结构如下所示。你可以根据自己的需求修改源码进行扩展，例如，把它作为一个请求的会话使用。
 
 ```go
 type Context struct {
@@ -195,7 +198,7 @@ func main() {
 }
 ```
 
-goweb默认采用jsoniter序列化和反序列化数据，goweb的Marshal、Unmarshal变量本身是一个函数.如果你想定义自己的序列化方式，并且覆盖掉他们。
+goweb默认采用json(使用的是开源的jsoniter)序列化和反序列化数据，goweb的Marshal、Unmarshal变量本身是一个函数.如果你想定义自己的序列化方式，只需要覆盖掉它就行，就像上面那样。
 
 ### 5.拦截器
 
@@ -221,7 +224,7 @@ func main() {
 
 ```
 
-像这样，goweb在执行handler之前，会执行一个或者多个interceptor，并且会根据AddInterceptor的先后顺序，顺序执行，当interceptor返回true时，会接着往下执行，返回false时，会终止执行。
+goweb在执行handler之前，会执行一个或者多个interceptor，并且会根据AddInterceptor的先后顺序执行，当interceptor返回true时，会接着往下执行，返回false时，会终止执行。
 
 ### 6.过滤器
 
@@ -237,6 +240,8 @@ func main() {
 }
 
 ```
+
+你可以给goweb添加一个过略器，在过滤器中，如果你想执行完自己的逻辑之后，执行handler，只需要调用f(w, r)。
 
 ### 7.自定义错误处理
 
@@ -266,7 +271,13 @@ func main() {
 
 ```
 
+当请求执行失败时，goweb中给出了一些默认的错误处理方式，就像上面那样。当然，你也可以定义一些自己错误处理方式。
 
+### 写在后面
+
+如果你有什么好的建议，可以发我邮箱，一起交流。
+
+568264999@qq.com
 
 
 

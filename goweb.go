@@ -7,6 +7,7 @@ import (
 	"sort"
 	"strconv"
 	"strings"
+	"log"
 )
 
 const DEFULT_NUM_HANDLER = 10
@@ -137,6 +138,7 @@ func ListenAndServe(addr string) error {
 	return defultGoWeb.ListenAndServe(addr)
 }
 
+//实现Handler接口
 func (gw *goWeb) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	//执行拦截器
 	if gw.interceptors != nil {
@@ -158,6 +160,7 @@ func (gw *goWeb) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	h(w, r)
 }
 
+//执行注册的handler
 func (gw *goWeb) handleHttp(w http.ResponseWriter, r *http.Request) {
 	method, err := getMethod(r.Method)
 	if err != nil {
@@ -211,7 +214,8 @@ func (gw *goWeb) doSinpleReturn(controller *controller, w http.ResponseWriter, r
 
 	//获取处理后的返回值
 	return1 := returnSlice[0]
-	jsonResponse, _ := gw.Marshal(return1.Interface())
+	jsonResponse, err := gw.Marshal(return1.Interface())
+	log.Println("marshal error:",err)
 	w.Write(jsonResponse)
 }
 
@@ -258,8 +262,8 @@ func (gw *goWeb) doBodyInject(controller *controller, w http.ResponseWriter, r *
 
 	//获取处理后的返回值
 	return1 := returnSlice[0]
-	jsonResponse, _ := gw.Marshal(return1.Interface())
-
+	jsonResponse, err := gw.Marshal(return1.Interface())
+	log.Println("marshal error:",err)
 	w.Write(jsonResponse)
 }
 
@@ -307,8 +311,8 @@ func (gw *goWeb) doBodyInjectCtx(controller *controller, w http.ResponseWriter, 
 
 	//获取处理后的返回值
 	return1 := returnSlice[0]
-	jsonResponse, _ := gw.Marshal(return1.Interface())
-
+	jsonResponse, err := gw.Marshal(return1.Interface())
+	log.Println("marshal error:",err)
 	w.Write(jsonResponse)
 }
 
@@ -343,8 +347,8 @@ func (gw *goWeb) doUrlInject(controller *controller, w http.ResponseWriter, r *h
 
 	//获取处理后的返回值
 	return1 := returnSlice[0]
-	jsonResponse, _ := json.Marshal(return1.Interface())
-
+	jsonResponse, err := json.Marshal(return1.Interface())
+	log.Println("marshal error:",err)
 	w.Write(jsonResponse)
 }
 
@@ -378,8 +382,8 @@ func (gw *goWeb) doUrlInjectCtx(controller *controller, w http.ResponseWriter, r
 
 	//获取处理后的返回值
 	return1 := returnSlice[0]
-	jsonResponse, _ := gw.Marshal(return1.Interface())
-
+	jsonResponse, err := gw.Marshal(return1.Interface())
+	log.Println("marshal error:",err)
 	w.Write(jsonResponse)
 }
 

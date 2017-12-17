@@ -35,6 +35,7 @@ func newRouter() *router {
 	return &router
 }
 
+//添加controller
 func (rt *router) addController(controller controller) {
 	rt.controllers = append(rt.controllers, controller)
 }
