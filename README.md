@@ -228,7 +228,7 @@ goweb在执行handler之前，会执行一个或者多个interceptor，并且会
 
 ### 6.过滤器
 
-```
+```go
 func filter(w http.ResponseWriter, r *http.Request, f func(http.ResponseWriter, *http.Request)) {
 	f(w, r)
 }
