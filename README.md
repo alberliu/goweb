@@ -173,7 +173,7 @@ func main() {
 
 group可以帮助你分层次的组织你的handler,使你的路由结构更清晰。
 
-### 4.定义自己序列化和反序列话方式
+### 4.定义自己序列化和反序列化方式
 
 ```go
 var json = jsoniter.ConfigCompatibleWithStandardLibrary
